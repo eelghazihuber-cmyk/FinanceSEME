@@ -1,0 +1,13 @@
+# Passwörter und Schlüssel
+.env
+
+# Python
+.venv/
+__pycache__/
+
+# Node
+node_modules/
+dist/
+
+# Vercel
+.vercel/
