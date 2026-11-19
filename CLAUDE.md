@@ -23,6 +23,8 @@ Abgabe: 15.04.2027. Antworte auf Deutsch, einfach und kurz.
 - Neue Tabellen in der Migration mit `ENABLE ROW LEVEL SECURITY` sperren
 - `.env` nie committen; ins Frontend nur den öffentlichen Supabase-Schlüssel
 - Noch nicht gebaute Endpunkte rufen `todo()` auf (Antwort 501)
+- Bei jeder Änderung, die committet wird, oben in der `CHANGELOG.md` einen Eintrag ergänzen (Datum, Wer, Was, Warum, Bereiche)
+- Commit-Nachrichten auf Deutsch und so, dass man versteht, was geändert wurde
 
 ## Befehle
 - Backend: `cd backend`, `.venv\Scripts\activate`, `uvicorn app.main:app --reload` (Doku: http://localhost:8000/docs)
