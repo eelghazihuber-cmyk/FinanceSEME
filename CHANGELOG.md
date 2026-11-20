@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-20 – Lokale Umgebung eingerichtet und Hosting-Anleitung
+- Wer: Elias
+- Was: Lokale Entwicklungsumgebung eingerichtet (Python 3.13, Node.js 24, `.venv`, `npm install`, `.env`-Dateien aus den Vorlagen angelegt, aber nicht committet). Mit `alembic upgrade head` die Tabellen in der Supabase-Datenbank angelegt. Backend und Frontend laufen lokal. Neue Anleitung `docs/HOSTING.md` mit Diagrammen zu Supabase, Vercel, Login-Ablauf und allen Umgebungsvariablen. Ordner `docs/bilder/` mit Liste der noch fehlenden Screenshots.
+- Warum: Damit alle im Team die App lokal starten können und nachvollziehbar ist, wie das Hosting eingerichtet ist.
+- Bereiche: `docs/HOSTING.md`, `docs/bilder/`, `README.md`, Supabase-Datenbank (Migration `0001_erste_tabellen`)
+
 ## 2026-11-19 – Changelog eingeführt
 - Wer: Elias
 - Was: CHANGELOG.md angelegt und die bisherigen Stände eingetragen. In der CLAUDE.md steht jetzt die Regel, dass jede committete Änderung hier eingetragen wird.

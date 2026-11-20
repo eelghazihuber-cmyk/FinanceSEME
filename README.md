@@ -85,6 +85,8 @@ Sonst sind sie über die automatische Supabase-API mit dem öffentlichen Schlüs
 
 ## Online stellen mit Vercel
 
+Ausführliche Anleitung mit Diagrammen und allen Umgebungsvariablen: [docs/HOSTING.md](docs/HOSTING.md)
+
 Zwei Vercel-Projekte aus demselben GitHub-Repository: eins für das Backend, eins für das Frontend.
 Jeder Push auf `main` geht danach automatisch online.
 
