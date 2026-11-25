@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-25 – KI-Analyse auf gemini-flash-lite-latest umgestellt
+- Wer: Elias
+- Was: `GET /ai/analyse` nutzt jetzt das Modell `gemini-flash-lite-latest` mit Denken auf "minimal" (max. 400 Ausgabe-Tokens, Timeout 25 s bleibt). Die "-latest"-Namen findet die API nur unter der Version `v1beta`, darum ist die jetzt eingestellt. Gemessen mit dem echten Schlüssel: `gemini-3.8-flash` ca. 87 s, `gemini-flash-latest` ca. 153 s (kann kein "minimal"), `gemini-flash-lite-latest` 2,5 s. Der ganze Endpunkt antwortet jetzt in 4–7 s mit 200.
+- Warum: Mit den anderen Modellen lief der Aufruf fast immer in das Timeout (504). Achtung: Hinter "-latest" kann Google das Modell ohne Ankündigung austauschen.
+- Bereiche: `backend/app/services/ai_service.py`
+
 ## 2026-11-25 – KI-Analyse: Timeout von 25 Sekunden
 - Wer: Elias
 - Was: `GET /ai/analyse` wartet höchstens 25 Sekunden auf Gemini und antwortet sonst mit 504 "KI antwortet nicht rechtzeitig". Das SDK wiederholt die Anfrage nicht mehr. Denken bleibt auf "low" (die niedrigste Stufe, "minimal" lehnt `gemini-3.8-flash` mit 400 ab), max. 400 Ausgabe-Tokens. Gemessen mit dem echten Schlüssel: DB-Abfrage ca. 1,1 s (Verbindung ca. 1 s, Abfrage 0,07 s, schon eine einzige Abfrage mit GROUP BY, darum nicht geändert), Gemini ca. 87 s.

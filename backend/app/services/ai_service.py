@@ -9,7 +9,9 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.services.report_service import ReportService
 
-MODEL = "gemini-3.8-flash"
+# "-latest"-Namen findet die API nur unter der Version v1beta
+MODEL = "gemini-flash-lite-latest"
+API_VERSION = "v1beta"
 TIMEOUT_SECONDS = 25
 SYSTEM_PROMPT = (
     "Du bist das Frühwarnsystem der App FinanceSEME. Analysiere die Ausgaben kurz auf Deutsch "
@@ -74,17 +76,20 @@ class AiService:
         client = genai.Client(
             api_key=settings.gemini_api_key,
             # Keine Wiederholungen, sonst würde ein Hänger mehrfach gewartet
-            http_options={"timeout": TIMEOUT_SECONDS * 1000, "retry_options": {"attempts": 1}},
+            http_options={
+                "api_version": API_VERSION,
+                "timeout": TIMEOUT_SECONDS * 1000,
+                "retry_options": {"attempts": 1},
+            },
         )
         interaction = client.interactions.create(
             model=MODEL,
             system_instruction=SYSTEM_PROMPT,
             input=prompt,
             generation_config={
-                # Zählt auch die Denk-Tokens mit. "low" ist die niedrigste Stufe,
-                # "minimal" lehnt dieses Modell mit Fehler 400 ab.
+                # Zählt auch die Denk-Tokens mit, darum so wenig Denken wie möglich
                 "max_output_tokens": 400,
-                "thinking_level": "low",
+                "thinking_level": "minimal",
             },
         )
         return (interaction.output_text or "").strip()
