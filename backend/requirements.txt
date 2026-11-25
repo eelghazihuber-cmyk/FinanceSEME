@@ -7,4 +7,4 @@ pydantic-settings
 python-multipart
 PyJWT[crypto]
 alembic
-anthropic
+google-genai

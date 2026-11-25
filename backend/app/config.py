@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     supabase_jwt_secret: str = ""
     # Frontend-Adressen, die das Backend aufrufen dürfen
     cors_origins: list[str] = ["http://localhost:5173"]
-    # Claude-API (console.anthropic.com). Leer = KI-Analyse ausgeschaltet
-    anthropic_api_key: str = ""
+    # Google Gemini (aistudio.google.com -> API-Schlüssel). Leer = KI-Analyse ausgeschaltet
+    gemini_api_key: str = ""
 
     @property
     def sqlalchemy_url(self) -> str:

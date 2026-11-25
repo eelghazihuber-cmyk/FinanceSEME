@@ -74,7 +74,7 @@ function AiAnalyse() {
       </button>
       {ai.error && <p className="error">{ai.error}</p>}
       {ai.answer && <p style={{ whiteSpace: "pre-wrap" }}>{ai.answer}</p>}
-      <p className="muted small">Ausgaben der letzten 3 Monate pro Kategorie, ausgewertet von Claude. Test, ohne Gewähr.</p>
+      <p className="muted small">Ausgaben der letzten 3 Monate pro Kategorie, ausgewertet von Google Gemini. Test, ohne Gewähr.</p>
     </section>
   );
 }

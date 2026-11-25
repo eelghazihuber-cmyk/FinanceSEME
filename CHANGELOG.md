@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-25 – KI-Test von Claude auf Google Gemini umgestellt
+- Wer: Elias
+- Was: Die KI-Analyse (`GET /ai/analyse`) nutzt jetzt Google Gemini (Modell `gemini-3.8-flash`, kostenlose Stufe) statt Claude. Paket `google-genai` statt `anthropic`, Einstellung `gemini_api_key` (Env `GEMINI_API_KEY`) statt `anthropic_api_key`. Max. 400 Ausgabe-Tokens, Denken auf "low", weil Gemini die Denk-Tokens mitzählt. Systemprompt, Endpunkt, 503 ohne Schlüssel und der Button bleiben gleich. Fehler beim KI-Dienst werden geloggt und mit 502 beantwortet.
+- Warum: Gemini hat eine kostenlose Stufe, das passt besser zum Schulprojekt. Achtung: In der kostenlosen Stufe darf Google die Eingaben zur Verbesserung seiner Produkte verwenden.
+- Bereiche: `backend/app/services/ai_service.py`, `backend/app/routers/ai.py`, `backend/app/config.py`, `backend/requirements.txt`, `backend/.env.example`, `frontend/src/pages/Dashboard.jsx`
+
 ## 2026-11-25 – Erster KI-Test (Frühwarnung)
 - Wer: Elias
 - Was: Neuer Endpunkt `GET /ai/analyse` (nur mit Login). Er summiert die Ausgaben der letzten 3 Monate pro Kategorie und lässt sie von Claude (Modell `claude-haiku-5-5`, max. 400 Tokens) kurz auf Deutsch bewerten. Ohne `ANTHROPIC_API_KEY` in der `.env` antwortet er mit 503 "KI nicht eingerichtet". Auf der Übersicht gibt es einen Button "KI-Analyse", der den Text anzeigt. Paket `anthropic` in `requirements.txt`.

@@ -1,13 +1,13 @@
 from datetime import date
 from uuid import UUID
 
-import anthropic
+from google import genai
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.services.report_service import ReportService
 
-MODEL = "claude-haiku-5-5"
+MODEL = "gemini-3.8-flash"
 SYSTEM_PROMPT = (
     "Du bist das Frühwarnsystem der App FinanceSEME. Analysiere die Ausgaben kurz auf Deutsch "
     "und nenne auffällige Punkte als Warnung. Erfinde keine Zahlen."
@@ -30,7 +30,7 @@ def three_months_ago(today: date) -> date:
 
 
 class AiService:
-    """Machbarkeitstest: Ausgaben pro Kategorie von Claude bewerten lassen."""
+    """Machbarkeitstest: Ausgaben pro Kategorie von Google Gemini bewerten lassen."""
 
     def __init__(self, db: Session):
         self.db = db
@@ -46,13 +46,15 @@ class AiService:
         lines = "\n".join(f"- {c.category_name}: {c.total} EUR" for c in categories)
         prompt = f"Meine Ausgaben pro Kategorie vom {date_from} bis {today}:\n{lines}"
 
-        client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-        response = client.messages.create(
+        client = genai.Client(api_key=settings.gemini_api_key)
+        interaction = client.interactions.create(
             model=MODEL,
-            max_tokens=400,
-            # Ohne Denkphase, damit die 400 Tokens ganz für die Antwort reichen
-            thinking={"type": "disabled"},
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}],
+            system_instruction=SYSTEM_PROMPT,
+            input=prompt,
+            generation_config={
+                # Zählt auch die Denk-Tokens mit, darum wenig Denken ("minimal" kann dieses Modell nicht)
+                "max_output_tokens": 400,
+                "thinking_level": "low",
+            },
         )
-        return "".join(block.text for block in response.content if block.type == "text").strip()
+        return (interaction.output_text or "").strip()
