@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-25 – Erster KI-Test (Frühwarnung)
+- Wer: Elias
+- Was: Neuer Endpunkt `GET /ai/analyse` (nur mit Login). Er summiert die Ausgaben der letzten 3 Monate pro Kategorie und lässt sie von Claude (Modell `claude-haiku-5-5`, max. 400 Tokens) kurz auf Deutsch bewerten. Ohne `ANTHROPIC_API_KEY` in der `.env` antwortet er mit 503 "KI nicht eingerichtet". Auf der Übersicht gibt es einen Button "KI-Analyse", der den Text anzeigt. Paket `anthropic` in `requirements.txt`.
+- Warum: Machbarkeitstest, ob eine KI-Frühwarnung zu den Ausgaben sinnvoll funktioniert. Noch nicht voll ausgebaut.
+- Bereiche: `backend/app/services/ai_service.py`, `backend/app/routers/ai.py`, `backend/app/config.py`, `backend/app/main.py`, `backend/requirements.txt`, `backend/.env.example`, `frontend/src/pages/Dashboard.jsx`, `frontend/src/api/client.js`
+
 ## 2026-11-20 – Lokale Umgebung eingerichtet und Hosting-Anleitung
 - Wer: Elias
 - Was: Lokale Entwicklungsumgebung eingerichtet (Python 3.13, Node.js 24, `.venv`, `npm install`, `.env`-Dateien aus den Vorlagen angelegt, aber nicht committet). Mit `alembic upgrade head` die Tabellen in der Supabase-Datenbank angelegt. Backend und Frontend laufen lokal. Neue Anleitung `docs/HOSTING.md` mit Diagrammen zu Supabase, Vercel, Login-Ablauf und allen Umgebungsvariablen. Ordner `docs/bilder/` mit Liste der noch fehlenden Screenshots.

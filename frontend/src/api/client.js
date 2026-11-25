@@ -57,6 +57,9 @@ export const api = {
   getForecast: (monthsAhead = 6) => request(`/forecast/${query({ months_ahead: monthsAhead })}`),
   getShortfalls: (buffer, monthsAhead = 6) => request(`/forecast/shortfalls${query({ buffer, months_ahead: monthsAhead })}`),
 
+  // KI-Analyse (Machbarkeitstest)
+  getAiAnalyse: () => request("/ai/analyse"),
+
   // Planung (Phase 5)
   getRecurring: notYet,
   getGoals: notYet,

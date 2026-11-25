@@ -5,6 +5,7 @@ from app.config import settings
 
 from app.routers import (
     accounts,
+    ai,
     auth,
     budgets,
     categories,
@@ -35,6 +36,7 @@ for module in (
     reports,
     forecast,
     imports,
+    ai,
 ):
     app.include_router(module.router)
 

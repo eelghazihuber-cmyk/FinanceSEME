@@ -50,7 +50,32 @@ export default function Dashboard() {
         <h2>Einnahmen und Ausgaben</h2>
         <IncomeExpenseChart data={state.monthly} />
       </section>
+      <AiAnalyse />
     </>
+  );
+}
+
+function AiAnalyse() {
+  const [ai, setAi] = useState({});
+
+  const run = () => {
+    setAi({ loading: true });
+    api
+      .getAiAnalyse()
+      .then((r) => setAi({ answer: r.answer }))
+      .catch((e) => setAi({ error: e.message }));
+  };
+
+  return (
+    <section className="card">
+      <h2>KI-Frühwarnung</h2>
+      <button onClick={run} disabled={ai.loading}>
+        {ai.loading ? "Analysiert …" : "KI-Analyse"}
+      </button>
+      {ai.error && <p className="error">{ai.error}</p>}
+      {ai.answer && <p style={{ whiteSpace: "pre-wrap" }}>{ai.answer}</p>}
+      <p className="muted small">Ausgaben der letzten 3 Monate pro Kategorie, ausgewertet von Claude. Test, ohne Gewähr.</p>
+    </section>
   );
 }
 
