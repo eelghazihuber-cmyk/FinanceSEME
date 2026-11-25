@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeout
 from datetime import date
 from uuid import UUID
 
@@ -8,10 +10,19 @@ from app.config import settings
 from app.services.report_service import ReportService
 
 MODEL = "gemini-3.8-flash"
+TIMEOUT_SECONDS = 25
 SYSTEM_PROMPT = (
     "Du bist das Frühwarnsystem der App FinanceSEME. Analysiere die Ausgaben kurz auf Deutsch "
     "und nenne auffällige Punkte als Warnung. Erfinde keine Zahlen."
 )
+
+
+class AiTimeout(Exception):
+    """Gemini hat nicht innerhalb von TIMEOUT_SECONDS geantwortet."""
+
+
+# Eigene Threads für die Gemini-Aufrufe, damit wir nach TIMEOUT_SECONDS aufgeben können
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 def three_months_ago(today: date) -> date:
@@ -46,13 +57,32 @@ class AiService:
         lines = "\n".join(f"- {c.category_name}: {c.total} EUR" for c in categories)
         prompt = f"Meine Ausgaben pro Kategorie vom {date_from} bis {today}:\n{lines}"
 
-        client = genai.Client(api_key=settings.gemini_api_key)
+        future = _executor.submit(self._ask_gemini, prompt)
+        try:
+            return future.result(timeout=TIMEOUT_SECONDS)
+        except FutureTimeout:
+            future.cancel()
+            raise AiTimeout()
+        except Exception as e:
+            # Greift das HTTP-Timeout des SDK zuerst, kommt z. B. httpx.ReadTimeout
+            if "timeout" in type(e).__name__.lower():
+                raise AiTimeout() from e
+            raise
+
+    @staticmethod
+    def _ask_gemini(prompt: str) -> str:
+        client = genai.Client(
+            api_key=settings.gemini_api_key,
+            # Keine Wiederholungen, sonst würde ein Hänger mehrfach gewartet
+            http_options={"timeout": TIMEOUT_SECONDS * 1000, "retry_options": {"attempts": 1}},
+        )
         interaction = client.interactions.create(
             model=MODEL,
             system_instruction=SYSTEM_PROMPT,
             input=prompt,
             generation_config={
-                # Zählt auch die Denk-Tokens mit, darum wenig Denken ("minimal" kann dieses Modell nicht)
+                # Zählt auch die Denk-Tokens mit. "low" ist die niedrigste Stufe,
+                # "minimal" lehnt dieses Modell mit Fehler 400 ab.
                 "max_output_tokens": 400,
                 "thinking_level": "low",
             },

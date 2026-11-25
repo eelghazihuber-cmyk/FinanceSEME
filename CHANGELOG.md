@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-25 – KI-Analyse: Timeout von 25 Sekunden
+- Wer: Elias
+- Was: `GET /ai/analyse` wartet höchstens 25 Sekunden auf Gemini und antwortet sonst mit 504 "KI antwortet nicht rechtzeitig". Das SDK wiederholt die Anfrage nicht mehr. Denken bleibt auf "low" (die niedrigste Stufe, "minimal" lehnt `gemini-3.8-flash` mit 400 ab), max. 400 Ausgabe-Tokens. Gemessen mit dem echten Schlüssel: DB-Abfrage ca. 1,1 s (Verbindung ca. 1 s, Abfrage 0,07 s, schon eine einzige Abfrage mit GROUP BY, darum nicht geändert), Gemini ca. 87 s.
+- Warum: Der KI-Aufruf hat über 1,5 Minuten gedauert. Langsam ist Gemini, nicht die Datenbank. Mit `gemini-3.8-flash` endet der Aufruf deshalb im Moment meistens mit 504.
+- Bereiche: `backend/app/services/ai_service.py`, `backend/app/routers/ai.py`
+
 ## 2026-11-25 – KI-Test von Claude auf Google Gemini umgestellt
 - Wer: Elias
 - Was: Die KI-Analyse (`GET /ai/analyse`) nutzt jetzt Google Gemini (Modell `gemini-3.8-flash`, kostenlose Stufe) statt Claude. Paket `google-genai` statt `anthropic`, Einstellung `gemini_api_key` (Env `GEMINI_API_KEY`) statt `anthropic_api_key`. Max. 400 Ausgabe-Tokens, Denken auf "low", weil Gemini die Denk-Tokens mitzählt. Systemprompt, Endpunkt, 503 ohne Schlüssel und der Button bleiben gleich. Fehler beim KI-Dienst werden geloggt und mit 502 beantwortet.

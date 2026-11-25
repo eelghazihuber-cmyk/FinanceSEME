@@ -7,7 +7,7 @@ from app.config import settings
 from app.database import get_db
 from app.deps import get_current_user
 from app.schemas import CurrentUser
-from app.services.ai_service import AiService
+from app.services.ai_service import AiService, AiTimeout
 
 log = logging.getLogger(__name__)
 
@@ -24,6 +24,8 @@ def analyse(
         raise HTTPException(status_code=503, detail="KI nicht eingerichtet")
     try:
         answer = AiService(db).analyse(user.id)
+    except AiTimeout:
+        raise HTTPException(status_code=504, detail="KI antwortet nicht rechtzeitig")
     except Exception:
         log.exception("KI-Analyse fehlgeschlagen")
         raise HTTPException(status_code=502, detail="KI-Dienst nicht erreichbar")
