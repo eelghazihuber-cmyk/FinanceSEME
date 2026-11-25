@@ -2,6 +2,12 @@
 
 Neueste Einträge oben.
 
+## 2026-11-25 – KI-Plan in CLAUDE.md festgehalten
+- Wer: Elias
+- Was: Neuer Abschnitt "KI-Plan (später, noch nicht bauen)" in der CLAUDE.md. Jetzt gibt es nur den Machbarkeitstest (`/ai/analyse` per Button, `gemini-flash-lite-latest`, Analyse-Text). Für M5 geplant: eine eigene KI-Linie im Prognose-Diagramm, die ohne Knopf erscheint, und ein Frühwarnsystem, das sich bei drohenden Engpässen oder auffälligen Ausgaben von selbst meldet. Die normale Prognose bleibt reine Rechnung im Backend, die KI ergänzt sie nur. Am Code ist nichts geändert.
+- Warum: Damit alle im Team (und Claude Code) wissen, wohin die KI-Funktion gehen soll, und sie nicht zu früh gebaut wird.
+- Bereiche: `CLAUDE.md`, `CHANGELOG.md`
+
 ## 2026-11-25 – KI-Analyse auf gemini-flash-lite-latest umgestellt
 - Wer: Elias
 - Was: `GET /ai/analyse` nutzt jetzt das Modell `gemini-flash-lite-latest` mit Denken auf "minimal" (max. 400 Ausgabe-Tokens, Timeout 25 s bleibt). Die "-latest"-Namen findet die API nur unter der Version `v1beta`, darum ist die jetzt eingestellt. Gemessen mit dem echten Schlüssel: `gemini-3.8-flash` ca. 87 s, `gemini-flash-latest` ca. 153 s (kann kein "minimal"), `gemini-flash-lite-latest` 2,5 s. Der ganze Endpunkt antwortet jetzt in 4–7 s mit 200.

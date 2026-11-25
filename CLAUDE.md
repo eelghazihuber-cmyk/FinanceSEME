@@ -42,3 +42,9 @@ Fertig: Login, Konten, Kategorien, Buchungen, Monatsauswertung, einfache Prognos
 | M4 | Dashboard und Budgets mit Ampel | 26.02.2027 |
 | M5 | Prognose mit Fixkosten und Szenarien | 02.04.2027 |
 | M6 | Tests, Doku, Abgabe | 15.04.2027 |
+
+## KI-Plan (später, noch nicht bauen)
+- Jetzt: nur Machbarkeitstest. `/ai/analyse` per Button "KI-Analyse" auf der Übersicht, Gemini `gemini-flash-lite-latest`, gibt einen Analyse-Text aus.
+- Später (M5): Die KI analysiert die Ausgaben und zeigt im Prognose-Diagramm automatisch (ohne Knopf) eine eigene Linie, wie sich der Kontostand laut KI entwickelt. Außerdem ist sie ein Frühwarnsystem, das sich bei drohenden Engpässen oder auffälligen Ausgaben von selbst meldet.
+- Die normale Prognose bleibt reine Rechnung im Backend, die KI ergänzt sie nur.
+- Nichts davon jetzt umsetzen.
